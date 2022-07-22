@@ -8,7 +8,12 @@ export default [
       {
         path: '/stu/list',
         component: '@/pages/stu/StuList.tsx',
-        title: '学院列表',
+        name: '学院列表',
+      },
+      {
+        path: '/stu/pub',
+        component: '@/pages/stu/StuPub.tsx',
+        name: '学院录入',
       },
     ],
   },
