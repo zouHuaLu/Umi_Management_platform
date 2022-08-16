@@ -14,7 +14,22 @@ let datalist = mockjs.mock({
 });
 export default {
   'GET /classes/stulist': datalist,
+  // 跟回调函数
   'DELETE /classes/stu': (req: any, res: any) => {
-    console.log(req.query);
+    let { id } = req.query;
+    datalist.data.forEach((item: any, index: number) => {
+      if (item.id == id) {
+        datalist.data.splice(index, 1);
+        res.send({
+          code: 200,
+          msg: '删除成功！',
+        });
+      }
+      return;
+    });
+    res.send({
+      code: 100,
+      msg: '未找到数据',
+    });
   },
 };
