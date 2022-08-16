@@ -19,7 +19,7 @@ export default [
   },
   {
     path: '/cate',
-    name: '学院管理',
+    name: '分类管理',
     routes: [
       {
         path: '/cate/list',
