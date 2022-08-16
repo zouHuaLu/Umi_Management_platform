@@ -17,4 +17,20 @@ export default [
       },
     ],
   },
+  {
+    path: '/cate',
+    name: '学院管理',
+    routes: [
+      {
+        path: '/cate/list',
+        component: '@/pages/category/catelist.jsx',
+        name: '分类列表',
+      },
+      {
+        path: '/cate/pub',
+        component: '@/pages/category/catepub.jsx',
+        name: '分类录入',
+      },
+    ],
+  },
 ];

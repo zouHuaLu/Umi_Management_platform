@@ -2,7 +2,7 @@ import { request } from 'umi';
 
 // 获取列表
 export const getStuList = () => {
-  return request('/classes/stulist', {
+  return request('/classes/stu', {
     method: 'GET',
   });
 };

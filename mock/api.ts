@@ -2,7 +2,7 @@ import mockjs from 'mockjs';
 let datalist = mockjs.mock({
   code: 200,
   msg: 'success',
-  'data|100': [
+  'results|100': [
     {
       name: '@cname',
       score: '@integer(0,100)',
@@ -13,13 +13,13 @@ let datalist = mockjs.mock({
   ],
 });
 export default {
-  'GET /classes/stulist': datalist,
+  'GET /classes/stu': datalist,
   // 跟回调函数
   'DELETE /classes/stu': (req: any, res: any) => {
     let { id } = req.query;
-    datalist.data.forEach((item: any, index: number) => {
+    datalist.results.forEach((item: any, index: number) => {
       if (item.id == id) {
-        datalist.data.splice(index, 1);
+        datalist.results.splice(index, 1);
         res.send({
           code: 200,
           msg: '删除成功！',

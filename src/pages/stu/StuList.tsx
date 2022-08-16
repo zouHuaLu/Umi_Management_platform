@@ -1,7 +1,7 @@
 import { Table, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import React, { useState, useEffect } from 'react';
 import { getStuList, delStu } from '@/api/stu';
+import { useRequest } from 'umi';
 interface DataType {
   key: number;
   name: string;
@@ -12,7 +12,6 @@ interface DataType {
 }
 
 const StuList = () => {
-  let [data, setData] = useState([]);
   const columns: ColumnsType<DataType> = [
     {
       title: 'ID',
@@ -52,11 +51,7 @@ const StuList = () => {
             size="small"
             danger
             onClick={() => {
-              delStu(record.id).then(() => {
-                getStuList().then((res) => {
-                  setData(res.data);
-                });
-              });
+              handleDel(record);
             }}
           >
             删除
@@ -65,12 +60,31 @@ const StuList = () => {
       ),
     },
   ];
-  useEffect(() => {
-    getStuList().then((res) => {
-      setData(res.data);
+  let dataSource, dataLoading;
+  let { data, loading } = useRequest(async () => {
+    let res = await getStuList();
+    return res;
+  });
+  dataSource = data;
+  dataLoading = loading;
+  const handleDel = (record: DataType) => {
+    delStu(record.id).then(() => {
+      let { data, loading } = useRequest(async () => {
+        let res = await getStuList();
+        return res;
+      });
+      dataSource = data;
+      dataLoading = loading;
     });
-  }, []);
-  return <Table columns={columns} dataSource={data} rowKey="id" />;
+  };
+  return (
+    <Table
+      loading={dataLoading}
+      columns={columns}
+      dataSource={dataSource}
+      rowKey="id"
+    />
+  );
 };
 
 export default StuList;
