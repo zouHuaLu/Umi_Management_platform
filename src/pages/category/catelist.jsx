@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Form, Input, Select } from 'antd';
-
-const { Option } = Select;
-
+import { Button, Form, Input, Spin } from 'antd';
+import { cateAdd } from '@/api/cake.js';
+import { useRequest } from 'umi';
 const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 16 },
@@ -13,71 +12,39 @@ const tailLayout = {
 
 const CatePub = () => {
   const [form] = Form.useForm();
-
-  const onGenderChange = (value) => {
-    switch (value) {
-      case 'male':
-        form.setFieldsValue({ note: 'Hi, man!' });
-        return;
-      case 'female':
-        form.setFieldsValue({ note: 'Hi, lady!' });
-        return;
-      case 'other':
-        form.setFieldsValue({ note: 'Hi there!' });
-    }
-  };
-
+  let { data, loading, run } = useRequest(
+    (values) => {
+      return cateAdd(values);
+    },
+    {
+      manual: true,
+    },
+  );
   const onFinish = (values) => {
-    console.log(values);
+    run(values);
   };
 
   const onReset = () => {
     form.resetFields();
   };
 
-  const onFill = () => {
-    form.setFieldsValue({
-      note: 'Hello world!',
-      gender: 'male',
-    });
-  };
-
   return (
-    <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-      <Form.Item name="note" label="Note" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
+    <Spin spinning={loading}>
+      <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
+        <Form.Item name="note" label="分类名称" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
 
-      <Form.Item
-        noStyle
-        shouldUpdate={(prevValues, currentValues) =>
-          prevValues.gender !== currentValues.gender
-        }
-      >
-        {({ getFieldValue }) =>
-          getFieldValue('gender') === 'other' ? (
-            <Form.Item
-              name="customizeGender"
-              label="Customize Gender"
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item>
-          ) : null
-        }
-      </Form.Item>
-      <Form.Item {...tailLayout}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-        <Button htmlType="button" onClick={onReset}>
-          Reset
-        </Button>
-        <Button type="link" htmlType="button" onClick={onFill}>
-          Fill form
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item {...tailLayout}>
+          <Button type="primary" htmlType="submit">
+            提交
+          </Button>
+          <Button htmlType="button" onClick={onReset}>
+            重置
+          </Button>
+        </Form.Item>
+      </Form>
+    </Spin>
   );
 };
 export default CatePub;

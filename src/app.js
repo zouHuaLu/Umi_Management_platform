@@ -1,5 +1,5 @@
+import { message } from 'antd';
 // 在此文件中做项目的运行时配置
-
 export const request = {
   // 请求拦截器
   requestInterceptors: [
@@ -18,6 +18,9 @@ export const request = {
   responseInterceptors: [
     async (response, options) => {
       let res = await response.json();
+      if (res.objectId && options.method.toLowerCase() === 'post') {
+        message.success('添加成功！');
+      }
       return {
         data: res.results,
       };
